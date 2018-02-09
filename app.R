@@ -10,7 +10,9 @@
 library(shiny)
 #library(dplyr)
 
-mydata <- read.csv("BP apprehensions 2010.csv")
+BP2010 <- read.csv("BP apprehensions 2010.csv")
+PB2017 <- read.csv("PB Apprehensions 2017.csv")
+PBSum <- read.csv("PB monthly summaries.csv")
 
 # Define UI for application that draws a barplot
 ui <- fluidPage(
@@ -23,7 +25,7 @@ ui <- fluidPage(
       sidebarPanel(
          selectInput("whatever",
                      "Sector:",
-                     choices = mydata$Sector)
+                     choices = BP2010$Sector)
       ),
       
       # Show a plot of the generated distribution
@@ -38,7 +40,7 @@ server <- function(input, output) {
    
    output$distPlot <- renderPlot({
      
-     barplot(height = as.matrix(mydata[mydata$Sector == input$whatever, 2:13]), 
+     barplot(height = as.matrix(BP2010[BP2010$Sector == input$whatever, 2:13]), 
              main = input$whatever,
              ylab = "Number of Apprehensions",
              xlab = "Month")
