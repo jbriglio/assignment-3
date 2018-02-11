@@ -6,9 +6,10 @@
 #
 #    http://shiny.rstudio.com/
 #
-
 library(shiny)
 #library(dplyr)
+require(gridExtra)
+library(ggplot2)
 
 BP2010 <- read.csv("BP apprehensions 2010.csv")
 PB2017 <- read.csv("PB Apprehensions 2017.csv")
@@ -18,7 +19,7 @@ PBSum <- read.csv("PB monthly summaries.csv")
 ui <- fluidPage(
    
    # Application title
-   titlePanel("Border Patrol Apprehensions in 2010"),
+   titlePanel("Border Patrol Apprehensions"),
    
    #Sidebar with a slider input for number of bins
    sidebarLayout(
@@ -30,24 +31,39 @@ ui <- fluidPage(
       
       # Show a plot of the generated distribution
       mainPanel(
-         plotOutput("distPlot")
+         tabsetPanel(
+           tabPanel("2010",plotOutput("distPlot")),
+           tabPanel("2017",plotOutput("distPlot2")),
+           tabPanel("Comparison",plotOutput("distPlot3")),
+           tabPanel("Summary")
+         )
       )
    )
 )
 
 # Define server logic required to draw a barplot
 server <- function(input, output) {
-   
+  
+   #bothYears <- rbind(BP2010,PB2017)
+   #print(bothYears)
+
    output$distPlot <- renderPlot({
-     
-     barplot(height = as.matrix(BP2010[BP2010$Sector == input$whatever, 2:13]), 
+      barplot(height = as.matrix(BP2010[BP2010$Sector == input$whatever, 2:13]),
              main = input$whatever,
              ylab = "Number of Apprehensions",
              xlab = "Month")
+   })
+   
+   output$distPlot2 <- renderPlot({
+     barplot(height = as.matrix(PB2017[PB2017$Sector == input$whatever,2:13]), 
+             main = input$whatever,
+             ylab = "Number of Apprehensions",
+             xlab = "Month")
+     #print(height)
      
    })
+   
 }
-
 # Run the application 
 shinyApp(ui = ui, server = server)
 
