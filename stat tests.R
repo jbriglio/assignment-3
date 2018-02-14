@@ -1,0 +1,25 @@
+data1 <- read.csv("BP apprehensions 2010.csv", header = TRUE, stringsAsFactors = FALSE)
+as.matrix(data1)
+data2 <- read.csv("PB Apprehensions 2017.csv", header = TRUE, stringsAsFactors = FALSE)
+as.matrix(data2)
+x <- subset(data1, select= -c(Sector))
+y <- subset(data2, select= -c(Sector))
+
+#comparison between each month in both years 
+t.test(data1$October, data2$October, paired=TRUE)
+t.test(data1$November, data2$November, paired=TRUE)
+t.test(data1$December, data2$December, paired=TRUE)
+t.test(data1$January, data2$January, paired=TRUE)
+t.test(data1$February, data2$February, paired=TRUE)
+t.test(data1$March, data2$March, paired=TRUE)
+t.test(data1$April, data2$April, paired=TRUE)
+t.test(data1$May, data2$May, paired=TRUE)
+t.test(data1$June, data2$June, paired=TRUE)
+t.test(data1$July, data2$July, paired=TRUE)
+t.test(data1$August, data2$August, paired=TRUE)
+t.test(data1$September, data2$September, paired=TRUE)
+
+#comparison between each location in both years 
+total2010<- rowSums(x[1:12])
+total2017 <- rowSums(y[1:12])
+t.test(total2010, total2017, paired=TRUE)

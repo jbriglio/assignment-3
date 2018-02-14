@@ -1,0 +1,74 @@
+---
+title: "stat tests markdown"
+author: "Janie Briglio"
+date: "2/14/2018"
+output: html_document
+---
+### T-Tests 
+entering data as a matrix and removing non numerical data 
+```{r}
+data1 <- read.csv("BP apprehensions 2010.csv", header = TRUE, stringsAsFactors = FALSE)
+as.matrix(data1)
+data2 <- read.csv("PB Apprehensions 2017.csv", header = TRUE, stringsAsFactors = FALSE)
+as.matrix(data2)
+x <- subset(data1, select= -c(Sector))
+y <- subset(data2, select= -c(Sector))
+```
+
+running comparisons between the months for each location
+october: no significant difference 
+```{r}
+t.test(data1$October, data2$October, paired=TRUE)
+```
+november: no significant difference  
+```{r}
+t.test(data1$November, data2$November, paired=TRUE)
+```
+december: no significant difference 
+```{r}
+t.test(data1$December, data2$December, paired=TRUE)
+```
+january: no significant difference
+```{r}
+t.test(data1$January, data2$January, paired=TRUE)
+```
+february: no significant difference 
+```{r}
+t.test(data1$February, data2$February, paired=TRUE)
+```
+march: no significant difference 
+```{r}
+t.test(data1$March, data2$March, paired=TRUE)
+```
+april: no significant difference 
+```{r}
+t.test(data1$April, data2$April, paired=TRUE)
+```
+may: no significant difference
+```{r}
+t.test(data1$May, data2$May, paired=TRUE)
+```
+june: no significant difference
+```{r}
+t.test(data1$June, data2$June, paired=TRUE)
+```
+july: no significant difference
+```{r}
+t.test(data1$July, data2$July, paired=TRUE)
+```
+august: no significant difference
+```{r}
+t.test(data1$August, data2$August, paired=TRUE)
+```
+september: no significant difference 
+```{r}
+t.test(data1$September, data2$September, paired=TRUE)
+```
+
+running a comparison between the totals of each location in both years 
+```{r}
+total2010<- rowSums(x[1:12])
+total2017 <- rowSums(y[1:12])
+t.test(total2010, total2017, paired=TRUE)
+```
+no significant difference
