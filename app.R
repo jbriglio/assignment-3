@@ -10,10 +10,12 @@ library(shiny)
 #library(dplyr)
 require(gridExtra)
 library(ggplot2)
+library(reshape2)
 
 BP2010 <- read.csv("BP apprehensions 2010.csv")
 PB2017 <- read.csv("PB Apprehensions 2017.csv")
 PBSum <- read.csv("PB monthly summaries.csv")
+
 
 # Define UI for application that draws a barplot
 ui <- fluidPage(
@@ -36,16 +38,24 @@ ui <- fluidPage(
            tabPanel("2017",plotOutput("distPlot2")),
            tabPanel("Comparison",plotOutput("distPlot3")),
            tabPanel("Summary")
-         )
+         ),
+         textOutput("selected_var")
       )
    )
 )
 
 # Define server logic required to draw a barplot
 server <- function(input, output) {
-  
-   #bothYears <- rbind(BP2010,PB2017)
-   #print(bothYears)
+   #print(BP2010)
+   #print(head(PB2017[1:13],-1))
+   PB2017 = head(PB2017[1:13],-1)
+   print(PB2017)
+   bothYears <- rbind(BP2010,PB2017)
+   print(bothYears)
+   #print(testgraph)
+   #gg <- melt(bothYears)
+   #print(gg)
+   
 
    output$distPlot <- renderPlot({
       barplot(height = as.matrix(BP2010[BP2010$Sector == input$whatever, 2:13]),
@@ -60,7 +70,22 @@ server <- function(input, output) {
              ylab = "Number of Apprehensions",
              xlab = "Month")
      #print(height)
-     
+   })
+   
+   output$distPlot3 <- renderPlot({
+     barplot(height = as.matrix(bothYears[bothYears$Sector == input$whatever,2:13]), beside=TRUE,
+             col = c("red", "blue"), bty="n",
+             main = input$whatever,
+             ylab = "Number of Apprehensions",
+             xlab = "Month")
+     legend(x=500,y=100, c("2010","2017"), pch=15,  col=c("red","blue"),  bty="n")
+     #print(height)
+   })
+   
+   output$selected_var <- renderText({ 
+     paste(input$whatever,"Average: ", 
+           input$whatever,"Mean: ",
+           input$whatever,"Max: ")
    })
    
 }
