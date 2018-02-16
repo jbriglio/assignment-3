@@ -36,10 +36,13 @@ ui <- fluidPage(
          tabsetPanel(
            tabPanel("2010",plotOutput("distPlot")),
            tabPanel("2017",plotOutput("distPlot2")),
-           tabPanel("Comparison",plotOutput("distPlot3")),
-           tabPanel("Summary")
-         ),
-         textOutput("selected_var")
+           tabPanel("Comparison By Sectors",plotOutput("distPlot3")),
+           tabPanel("2010 Totals", plotOutput("distPlot4")),
+           tabPanel("2017 Totals", plotOutput("distPlot5")),
+           tabPanel("T Test"),
+           tabPanel("Monthly Summary")
+         )
+         # textOutput("selected_var")
       )
    )
 )
@@ -81,12 +84,49 @@ server <- function(input, output) {
      legend(x=500,y=100, c("2010","2017"), pch=15,  col=c("red","blue"),  bty="n")
      #print(height)
    })
+
    
-   output$selected_var <- renderText({ 
-     paste(input$whatever,"Average: ", 
-           input$whatever,"Mean: ",
-           input$whatever,"Max: ")
+   rownames(BP2010) <- BP2010[,1]
+   View(BP2010)
+   x <- subset(BP2010, select= -c(Sector))
+   x <- rbind(x, colSums(x))
+   rownames(x) <- c(rownames(x)[-length(rownames(x))], "Total")
+   x <- cbind(x,rowSums(x))
+   colnames(x) <- c(colnames(x)[-length(colnames(x))], "Total")
+   View(x)
+   output$distPlot4 <- renderPlot({
+     barplot(x[1:9, 13], names.arg = rownames(x)[1:9], 
+             las=2,
+             axisnames=TRUE,
+             main="2010 Border Patrol Apprehensions by Sector",
+             border="black",
+             col="blue")
    })
+   
+   rownames(PB2017) <- PB2017[,1]
+   y <- subset(PB2017, select= -c(Sector))
+   y <- rbind(y, colSums(y))
+   rownames(y) <- c(rownames(y)[-length(rownames(y))], "Total")
+   y <- cbind(y, rowSums(y))
+   colnames(y) <- c(colnames(y)[-length(colnames(y))], "Total")
+   View(y)
+   output$distPlot5 <- renderPlot({
+     barplot(y[1:9, 13], names.arg = rownames(y)[1:9], 
+             las=2,
+             axisnames=TRUE,
+             main="2017 Border Patrol Apprehensions by Sector",
+             border="black",
+             col="blue")  
+   })
+   
+   
+
+   
+   # output$selected_var <- renderText({ 
+   #   paste(input$whatever,"Average: ", 
+   #         input$whatever,"Mean: ",
+   #         input$whatever,"Max: ")
+   # })
    
 }
 # Run the application 
