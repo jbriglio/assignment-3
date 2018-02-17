@@ -39,11 +39,16 @@ ui <- fluidPage(
            tabPanel("Sector Comparisons",plotOutput("distPlot3")),
            tabPanel("2010 Totals", plotOutput("distPlot4")),
            tabPanel("2017 Totals", plotOutput("distPlot5")),
+<<<<<<< HEAD
            tabPanel("T Test",
                     h3("T Test Results by Month"),
                     htmlOutput("txtout")),
                 
            tabPanel("Time Series", plotOutput("timeSeries"))
+=======
+           tabPanel("T Test"),
+           tabPanel("Monthly Summary", plotOutput("timeSeries"))
+>>>>>>> origin/master
          )
          # textOutput("selected_var")
       )
@@ -181,6 +186,31 @@ server <- function(input, output) {
    #         input$whatever,"Max: ")
    # })
    
+   output$timeSeries <- renderPlot({
+     ts.plot(ts(as.vector(rev(t(rev(PBSum[-1])))), start = c(2000,10), frequency=12),
+             ts(as.vector(  t(  rev(rep(c(rowMeans(PBSum[18,-1])),each=12)  )  )), start = c(2000,10), frequency=12),
+             ts(as.vector(  t(  rev(rep(c(rowMeans(PBSum[17,-1])),each=12)  )  )), start = c(2001,10), frequency=12),
+             ts(as.vector(  t(  rev(rep(c(rowMeans(PBSum[16,-1])),each=12)  )  )), start = c(2002,10), frequency=12),
+             ts(as.vector(  t(  rev(rep(c(rowMeans(PBSum[15,-1])),each=12)  )  )), start = c(2003,10), frequency=12),
+             ts(as.vector(  t(  rev(rep(c(rowMeans(PBSum[14,-1])),each=12)  )  )), start = c(2004,10), frequency=12),
+             ts(as.vector(  t(  rev(rep(c(rowMeans(PBSum[13,-1])),each=12)  )  )), start = c(2005,10), frequency=12),
+             ts(as.vector(  t(  rev(rep(c(rowMeans(PBSum[12,-1])),each=12)  )  )), start = c(2006,10), frequency=12),
+             ts(as.vector(  t(  rev(rep(c(rowMeans(PBSum[11,-1])),each=12)  )  )), start = c(2007,10), frequency=12),
+             ts(as.vector(  t(  rev(rep(c(rowMeans(PBSum[10,-1])),each=12)  )  )), start = c(2008,10), frequency=12),
+             ts(as.vector(  t(  rev(rep(c(rowMeans(PBSum[9,-1])),each=12)  )  )), start = c(2009,10), frequency=12),
+             ts(as.vector(  t(  rev(rep(c(rowMeans(PBSum[8,-1])),each=12)  )  )), start = c(2010,10), frequency=12),
+             ts(as.vector(  t(  rev(rep(c(rowMeans(PBSum[7,-1])),each=12)  )  )), start = c(2011,10), frequency=12),
+             ts(as.vector(  t(  rev(rep(c(rowMeans(PBSum[6,-1])),each=12)  )  )), start = c(2012,10), frequency=12),
+             ts(as.vector(  t(  rev(rep(c(rowMeans(PBSum[5,-1])),each=12)  )  )), start = c(2013,10), frequency=12),
+             ts(as.vector(  t(  rev(rep(c(rowMeans(PBSum[4,-1])),each=12)  )  )), start = c(2014,10), frequency=12),
+             ts(as.vector(  t(  rev(rep(c(rowMeans(PBSum[3,-1])),each=12)  )  )), start = c(2015,10), frequency=12),
+             ts(as.vector(  t(  rev(rep(c(rowMeans(PBSum[2,-1])),each=12)  )  )), start = c(2016,10), frequency=12),
+             ts(as.vector(  t(  rev(rep(c(rowMeans(PBSum[1,-1])),each=12)  )  )), start = c(2017,10), frequency=12),
+             
+             gpars=list(xlab="Year", ylab="Apprehensions", 
+                        lty=1, col=c('blue',rep(c('red'),times=18), ltw=2))
+      );text(rev(PBSum[,1])+1,rev(c(rowMeans(PBSum[-1])))+4000,labels=paste(rev(PBSum[,1])),cex=0.6,col="red")
+     })
 }
 # Run the application 
 shinyApp(ui = ui, server = server)
