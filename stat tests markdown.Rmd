@@ -10,7 +10,9 @@ entering data as a matrix and removing non numerical data
 data1 <- read.csv("BP apprehensions 2010.csv", header = TRUE, stringsAsFactors = FALSE)
 as.matrix(data1)
 data2 <- read.csv("PB Apprehensions 2017.csv", header = TRUE, stringsAsFactors = FALSE)
+data2 <- head(data2[1:13],-1)
 as.matrix(data2)
+
 x <- subset(data1, select= -c(Sector))
 y <- subset(data2, select= -c(Sector))
 ```
