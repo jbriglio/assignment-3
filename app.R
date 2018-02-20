@@ -31,7 +31,7 @@ ui <- fluidPage(
                      choices = BP2010$Sector)
       ),
       
-      # Show a plot of the generated distribution
+      # Tabs for shiny app - each displays different graph version 
       mainPanel(
          tabsetPanel(
            tabPanel("2010",plotOutput("distPlot"), "This barplot displays 2010 apphrensions by sector and month"),
@@ -54,28 +54,21 @@ ui <- fluidPage(
            tabPanel("Time Series", plotOutput("timeSeries"), "This time series graph represents the total yearly apprehensions from 2000-2017. The trend shows 
                     the total apprhensions slowly decreasing as the years move towards 2017.")
 
-           #tabPanel("T Test"),
-           #tabPanel("Monthly Summary", plotOutput("timeSeries"))
-
          )
-         # textOutput("selected_var")
+
       )
    )
 )
 
 # Define server logic required to draw a barplot
 server <- function(input, output) {
-   #print(BP2010)
-   #print(head(PB2017[1:13],-1))
+  
+   #remove non-numerical data from 2017 apprhensions csv
    PB2017 = head(PB2017[1:13],-1)
-   #print(PB2017)
+   #combine 2010 and 2017 data for side by side plot
    bothYears <- rbind(BP2010,PB2017)
-   #print(bothYears)
-   #print(testgraph)
-   #gg <- melt(bothYears)
-   #print(gg)
    
-
+   #2010 Apprehensions by sector bar plot
    output$distPlot <- renderPlot({
       barplot(height = as.matrix(BP2010[BP2010$Sector == input$whatever, 2:13]),
              main = input$whatever,
@@ -83,13 +76,18 @@ server <- function(input, output) {
              xlab = "Month")
    })
    
+   #2017 Apprehensions by sector bar plot
    output$distPlot2 <- renderPlot({
      barplot(height = as.matrix(PB2017[PB2017$Sector == input$whatever,2:13]), 
              main = input$whatever,
              ylab = "Number of Apprehensions",
              xlab = "Month")
-     #print(height)
    })
+   
+   #2010 and 2017 side by side bar plot comparison organized by sector
+   #uses both rbind of 2017 and 2010 data 
+   
+   bothYears <- rbind(BP2010,PB2017)
    
    output$distPlot3 <- renderPlot({
      barplot(height = as.matrix(bothYears[bothYears$Sector == input$whatever,2:13]), beside=TRUE,
@@ -101,15 +99,14 @@ server <- function(input, output) {
    })
 
    
-   #2010 total apprhensions by sector 
+   #Total Apprehnsions by Sector 2010 bar graph 
+   #data taken from BP Apprehensions 2010
    rownames(BP2010) <- BP2010[,1]
-   #View(BP2010)
    x <- subset(BP2010, select= -c(Sector))
    x <- rbind(x, colSums(x))
    rownames(x) <- c(rownames(x)[-length(rownames(x))], "Total")
    x <- cbind(x,rowSums(x))
    colnames(x) <- c(colnames(x)[-length(colnames(x))], "Total")
-   #View(x)
    print(x)
    output$distPlot4 <- renderPlot({
      barplot(x[1:9, 13], names.arg = rownames(x)[1:9], 
@@ -120,9 +117,9 @@ server <- function(input, output) {
              col="red")
    })
    
-   #2017 total apprehensions by sector 
+   #Total Apprehnsions by Sector 2017 bar graph 
+   #data taken from PB Apprehensions 2017
    rownames(PB2017) <- PB2017[,1]
-   #print(PB2017)
    y <- subset(PB2017, select= -c(Sector))
    y <- rbind(y, colSums(y))
    rownames(y) <- c(rownames(y)[-length(rownames(y))], "Total")
@@ -138,6 +135,8 @@ server <- function(input, output) {
              col="blue")  
    })
    
+   #T Test results - output 2010 and 2017 monthly comparison t-statistic
+   #Data taken from BP Apprehenions 2010 and PB Apphrensions 2017
    output$txtout <- renderText({
      test1 = (t.test(BP2010$October, PB2017$October, paired=TRUE))$statistic
      test2 = (t.test(BP2010$November, PB2017$November, paired=TRUE))$statistic
@@ -161,9 +160,10 @@ server <- function(input, output) {
            which matches the 2010 CBP total apprehensions data - as March, April and May have the highest total apprensions in 2010 but the lowest in 2017.
            Comparatively, October November and December have the lowest T-test values, going into the negative range. This 3 month period has the highest total
            apprensions in 2017 but is not too different from it's 2010 data, which is why the t-test values are closer to zero.")
-     #cat("1st line\n2nd line\n") 
    })
    
+   #Time Series Plot
+   #data taken from PB Monthly summaries
    output$timeSeries <- renderPlot({
           ts.plot(ts(as.vector(rev(t(rev(PBSum[-1])))), start = c(2000,10), frequency=12),
                                 ts(as.vector(  t(  rev(rep(c(rowMeans(PBSum[18,-1])),each=12)  )  )), start = c(2000,10), frequency=12),

@@ -27,6 +27,11 @@ knitr::opts_chunk$set(echo = FALSE)
              col="red")
 ```
 
+## 2010 Total Apprehensions: Analysis
+- The data shows that Tuscon is sector with the highest total apphrensions in 2010 with 212,202 total
+- On the other hand, Big Bend has the least apphrensions in 2010 with 5,288
+                    
+
 ## 2017 Total Apprehensions 
 ```{r}
    PB2017 <- read.csv("PB Apprehensions 2017.csv")
@@ -44,6 +49,12 @@ knitr::opts_chunk$set(echo = FALSE)
              border="black",
              col="blue")  
 ```
+
+## 2017 Total Apprehensions: Analysis
+- This barplot identifies the summation of apprehensions in 2017 by each sector. There is a change in the maximum compared to 2010.
+- This time Rio Grande Valley has the greatest total apprhensions, with 137,562 total (230% more than in 2010).
+- While Tuscon had the max apprehensions in 2010, it has 38,657 this year, 81% less than 2010.
+
 
 ## Time Series
 
@@ -74,6 +85,20 @@ knitr::opts_chunk$set(echo = FALSE)
                          );text(rev(PBSum[,1])+1,rev(c(rowMeans(PBSum[-1])))+4000,labels=paste(rev(PBSum[,1])),cex=0.6,col="red")
 ```
 
+
+
+
+## Time Series: Analysis
+- Looking at the data, there is a noticible but gradual trend of the total yearly apprehensions diminishing. 
+- 2000 started out with the most apprehenisons while 2017 exhibited the lowest apprehensions
+
+## 2010 and 2017 Sector Comparisons 
+- the following 9 graphs represent a side by side comparison of each sector's apphrensions in the year 2010 and 2017
+- El Centrio, San Diego and Tuscon exhibit a decrease in overall apprehensions from 2010
+- El Paso, Big Bend and Yuma exhibit a slight increase in overall apprehnsions from 2010
+- Del Rio and Laredo exhibit mixed results, with Del Rio spiking in the winter and falling in the summer and 
+Laredo falling in the spring/summer and increasing during the winter
+
 ## Big Bend Comparison
 \includegraphics{img/bigbend.png}
 
@@ -100,6 +125,15 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Yuma Comparison
 \includegraphics{img/yuma.png}
+
+## T Test
+- The following slides are the outputs of each comparison between the 2010 and 2017 respective months
+- The data we're interested in is the t statistic outputed in the second row 
+- By comparing all the t statitics from the following tests we can observe that March April and May have the highest T-test values
+  which matches the 2010 CBP total apprehensions data. This makes sense because they have the highest T statistics. Meaning there is a 
+  large gap between the apprhensions in 2010 and 2017 with those months 
+- Comparatively, October November and December have the lowest T-test values, going into the negative range. This 3 month period has the highest total
+  apprensions in 2017 but is not too different from it's 2010 data, which is why the t-test values are closer to zero.
 
 ## T Test: October Comparison
 ```{r}
